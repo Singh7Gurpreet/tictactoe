@@ -1,8 +1,20 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
+const http = require('http');
+const socket = require('socket.io');
 
 const app = express();
+const server = http.createServer(app);
+const io = new socket.Server(server, {});
+const socketFunction = require('./controllers/socketController');
+// const io = new socket.Server(http.createServer(app), {});
+
+io.on('connection', (socket) => {
+  socketFunction(socket);
+});
+
+io.on('joinRoom', (socket) => {});
 
 const pathName = path.join(__dirname, '/public');
 
@@ -26,7 +38,7 @@ app.post('/name', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '/views/loginPage.html'));
+  res.sendFile(path.join(__dirname, '/views/board.html'));
 });
 
 app.get('/joinGame', (req, res) => {
@@ -37,6 +49,6 @@ app.get('/joinGame', (req, res) => {
   }
 });
 
-app.listen(3000, () => {
+server.listen(3000, () => {
   console.log('Listening to port 3000...');
 });

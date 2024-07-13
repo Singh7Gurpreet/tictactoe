@@ -1,11 +1,14 @@
 const buttons = document.querySelectorAll('.elementButton');
+const socket = io();
 
-async function postReqeuest(tileSelected) {
-  // send tile selected through socket to server
+async function postRequest(tileSelected) {
+  console.log(tileSelected);
 }
 
-buttons.map((button) => {
-  button.addEventListener('click', () => {});
+buttons.forEach((button) => {
+  button.addEventListener('click', (event) => {
+    postRequest(event.target.dataset.value);
+  });
 });
 
 //will receive socket from server to apply changes
