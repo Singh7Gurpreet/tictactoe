@@ -1,5 +1,6 @@
 const { joinRoom } = require('./roomController');
 const { tileMarked, winner, tied } = require('./playerActions');
+const { disconnect } = require('mongoose');
 
 const JOIN_ROOM = 'joinRoom';
 const MARK_TILE = 'markTile';
@@ -9,8 +10,13 @@ const TIED = 'tied';
 // Will contain logic for joining already created game
 // and creatting game
 function socketFunction(socket) {
-  socket.on(JOIN_ROOM, (roomName) => {
-    joinRoom(socket, roomName);
+  socket.on('disconnect', () => {
+    // will delete room from database the room
+    console.log(`${socket.id} disconnected`);
+  });
+
+  socket.on(JOIN_ROOM, () => {
+    joinRoom(socket);
   });
 
   // Records player markers on board tiles

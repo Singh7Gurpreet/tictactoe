@@ -1,13 +1,16 @@
 const buttons = document.querySelectorAll('.elementButton');
-const socket = io();
 
-async function postRequest(tileSelected) {
-  console.log(tileSelected);
+socket.on('markedStatus', (markedTile) => {
+  console.log('Player Marked ', markedTile);
+});
+
+async function playerAction(tileSelected) {
+  socket.emit('markTile', tileSelected);
 }
 
 buttons.forEach((button) => {
   button.addEventListener('click', (event) => {
-    postRequest(event.target.dataset.value);
+    playerAction(event.target.dataset.value);
   });
 });
 

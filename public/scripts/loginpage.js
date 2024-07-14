@@ -18,3 +18,12 @@ joinButton.addEventListener('click', async (event) => {
     window.location.href = './joinGame';
   }
 });
+
+createButton.addEventListener('click', async (event) => {
+  const name = document.querySelector('input');
+  if (isVerified(name.value) === false) {
+    name.classList.add('is-invalid');
+  } else {
+    window.location.href = '/createGame';
+  }
+});
