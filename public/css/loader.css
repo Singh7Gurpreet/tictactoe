@@ -1,0 +1,30 @@
+.loader {
+  width: 65px;
+  height: 30px;
+  position: relative;
+  background-color: white; /* Set background color */
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.loader:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #3498db; /* Color of the animated bar */
+  border-radius: 50px;
+  animation: l3 0.75s infinite alternate;
+}
+
+@keyframes l3 {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 0;
+  }
+  100% {
+    left: 100%;
+  }
+}

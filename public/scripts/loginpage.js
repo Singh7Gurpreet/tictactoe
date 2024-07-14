@@ -7,7 +7,6 @@ function isVerified(name) {
 }
 
 joinButton.addEventListener('click', async (event) => {
-  alert('fdksslkjk');
   const name = document.querySelector('input');
   if (isVerified(name.value) === false) {
     name.classList.add('is-invalid');

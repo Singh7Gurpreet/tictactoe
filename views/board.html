@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href=" /css/board.css">
+<link rel="stylesheet" href="/css/loader.css">
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
 <script>
   const socket = io();
@@ -16,6 +17,13 @@
 <script defer src="/scripts/board.js"></script>
 </head>
 <body>
+  <div class = "loading">
+    <div class = "loader"></div>
+    <div>
+      <p>Share this code with your friend to join room</p>
+    </div>
+    <div class = "code"><p>2516</p></div>
+  </div>
   <div class = "main">
     <div class = "board">
       <div class = "board_element"><button class = "elementButton" data-value = "1" >  </button> </div>
