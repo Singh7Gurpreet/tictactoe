@@ -1,20 +1,36 @@
 const buttons = document.querySelectorAll('.elementButton');
+let state = 0;
 let opponentName, yourName;
 
 async function getName() {
   try {
     const response = await axios.get('http://localhost:3000/name');
-    console.log(response.data);
+    opponentName = response.opponentName;
+    yourName = response.name;
   } catch (error) {
     console.error(error);
     window.alert('something went wrong');
   }
 }
+
 let mark, ownMark;
+
+function flipState() {
+  state !== state;
+  const turn = state === 0 ? `${opponentName}'s turn` : `${yourName}'s turn`;
+  document.querySelector('.code p').innerText = turn;
+}
+
+// s is player's state fetching info from server
 socket.on('symbol', (symbol) => {
   mark = symbol;
   if (mark === 'X') ownMark = 'O';
   else ownMark = 'X';
+});
+
+socket.on('state', (stateVar) => {
+  state = stateVar;
+  if (state === 1) addEvents();
 });
 
 socket.on('roomNumber', (roomNumber) => {
@@ -31,18 +47,27 @@ socket.on('joinedRoom', () => {
 socket.on('markedStatus', (markedTile) => {
   buttons[markedTile - 1].innerText = ownMark;
   buttons[markedTile - 1].disabled = true;
+  flipState();
+  addEvents();
 });
 
-async function playerAction(tileSelected, button) {
+async function playerAction(event) {
+  const tileSelected = event.target.dataset.value;
+  const button = event.target;
   button.innerText = mark;
   socket.emit('markTile', tileSelected);
+  flipState();
+  removeEvents();
 }
 
-buttons.forEach((button) => {
-  button.addEventListener('click', (event) => {
-    button.disabled = true;
-    playerAction(event.target.dataset.value, button);
+function removeEvents() {
+  buttons.forEach((button) => {
+    button.removeEventListener('click', playerAction);
   });
-});
-//will receive socket from server to apply changes
-//made by opponent on board
+}
+
+function addEvents() {
+  buttons.forEach((button) => {
+    button.addEventListener('click', playerAction);
+  });
+}

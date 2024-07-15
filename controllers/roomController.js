@@ -10,6 +10,8 @@ function joinRoom(socket) {
   socket.join(roomId);
   if (set.has(roomId)) {
     socket.to(roomId).emit('joinedRoom');
+    socket.to(roomId).emit('state', 1);
+    socket.emit('state', 0);
     socket.emit('joinedRoom');
     socket.emit('symbol', 'X');
   } else {

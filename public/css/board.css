@@ -8,6 +8,10 @@ body{
   background-color: black;
 }
 
+.turns{
+  color: white;
+}
+
 .loading{
   z-index: 10;
   background-color: black;
