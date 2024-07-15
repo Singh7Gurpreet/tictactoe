@@ -7,8 +7,11 @@ socket.on('symbol', (symbol) => {
   else ownMark = 'X';
 });
 
+socket.on('roomNumber', (roomNumber) => {
+  document.querySelector('.code p').innerText = roomNumber;
+});
+
 socket.on('joinedRoom', () => {
-  console.log('Other player joined');
   const loading = document.querySelector('.loading');
   loading.style.display = 'none';
   document.querySelector('.main').style.display = 'grid'; // Corrected to 'block'
@@ -17,7 +20,6 @@ socket.on('joinedRoom', () => {
 socket.on('markedStatus', (markedTile) => {
   buttons[markedTile - 1].innerText = ownMark;
   buttons[markedTile - 1].disabled = true;
-  console.log('Player Marked ', markedTile);
 });
 
 async function playerAction(tileSelected, button) {

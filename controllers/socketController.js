@@ -12,6 +12,7 @@ const TIED = 'tied';
 function socketFunction(socket) {
   socket.on('disconnect', () => {
     // will delete room from database the room
+    socket.request.session.room = undefined;
     console.log(`${socket.id} disconnected`);
   });
 

@@ -35,7 +35,6 @@ io.on('connection', (socket) => {
 app.post('/name', (req, res) => {
   const { name } = req.body;
   req.session.name = name;
-  console.log(req.body);
   res.status(201).send({});
 });
 
