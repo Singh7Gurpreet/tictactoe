@@ -1,5 +1,15 @@
 const buttons = document.querySelectorAll('.elementButton');
+let opponentName, yourName;
 
+async function getName() {
+  try {
+    const response = await axios.get('http://localhost:3000/name');
+    console.log(response.data);
+  } catch (error) {
+    console.error(error);
+    window.alert('something went wrong');
+  }
+}
 let mark, ownMark;
 socket.on('symbol', (symbol) => {
   mark = symbol;
@@ -12,6 +22,7 @@ socket.on('roomNumber', (roomNumber) => {
 });
 
 socket.on('joinedRoom', () => {
+  getName();
   const loading = document.querySelector('.loading');
   loading.style.display = 'none';
   document.querySelector('.main').style.display = 'grid'; // Corrected to 'block'
@@ -33,6 +44,5 @@ buttons.forEach((button) => {
     playerAction(event.target.dataset.value, button);
   });
 });
-
 //will receive socket from server to apply changes
 //made by opponent on board

@@ -9,6 +9,7 @@ const server = http.createServer(app);
 const io = new socket.Server(server, {});
 
 const { joinRoom } = require('./controllers/helper');
+const { getNames } = require('./controllers/roomController');
 const socketFunction = require('./controllers/socketController');
 // const io = new socket.Server(http.createServer(app), {});
 
@@ -38,8 +39,24 @@ app.post('/name', (req, res) => {
   res.status(201).send({});
 });
 
+app.get('/name', (req, res) => {
+  const requestedBy = req.session.name;
+  const roomId = req.session.room;
+  const membersInRoom = getNames(roomId);
+  let opponentName;
+  for (const member of membersInRoom) {
+    if (member != requestedBy) {
+      opponentName = member;
+      break; // Assuming there's only one opponent, stop once we find one
+    }
+  }
+  res.send({
+    name: requestedBy,
+    opponentName: opponentName[0],
+  });
+});
+
 app.get('/', (req, res) => {
-  console.log(req.session.room);
   res.sendFile(path.join(__dirname, '/views/loginPage.html'));
 });
 

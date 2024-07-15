@@ -1,6 +1,5 @@
 const { joinRoom } = require('./roomController');
 const { tileMarked, winner, tied } = require('./playerActions');
-const { disconnect } = require('mongoose');
 
 const JOIN_ROOM = 'joinRoom';
 const MARK_TILE = 'markTile';

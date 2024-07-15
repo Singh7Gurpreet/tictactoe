@@ -15,9 +15,15 @@ function joinRoom(socket) {
   } else {
     set.add(roomId);
     socket.emit('symbol', 'O');
+    map.set(roomId, []);
   }
+  map.get(roomId).push([socket.request.session.name]);
   socket.emit('roomNumber', roomId);
   console.log(`${socket.id} joined ${roomId}`);
 }
 
-module.exports = { joinRoom };
+function getNames(roomId) {
+  return map.get(roomId);
+}
+
+module.exports = { joinRoom, getNames };
