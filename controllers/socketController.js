@@ -10,9 +10,15 @@ const TIED = 'tied';
 // and creatting game
 function socketFunction(socket) {
   socket.on('disconnect', () => {
+    // console.log(socket.request.session[room]);
     // will delete room from database the room
-    socket.request.session.room = undefined;
-    console.log(`${socket.id} disconnected`);
+    // delete socket.request.session[room];
+    //   socket.request.session.save((err) => {
+    //     if (err) {
+    //       console.error('Error saving session: ', err);
+    //     }
+    //   });
+    //   console.log(`${socket.id} disconnected`);
   });
 
   socket.on(JOIN_ROOM, () => {

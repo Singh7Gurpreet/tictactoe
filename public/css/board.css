@@ -38,10 +38,10 @@ code  {
   justify-content: center;
   align-items: center;
   display: none;
+  gap:40px
 }
 
 .board {
-  display: grid;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   background-color: white;
