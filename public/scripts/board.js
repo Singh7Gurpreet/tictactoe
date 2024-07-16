@@ -6,14 +6,63 @@ function getText(button) {
   return button.innerText;
 }
 
-function checkWinner() {
-  if (
-    getText(buttons[0]) !== '' &&
-    getText(buttons[0]) === getText(buttons[1]) &&
-    getText(buttons[2]) === getText(buttons[1])
-  ) {
-    console.log('Won');
+function checkForRows() {
+  // check for rows
+  for (let i = 0; i < 9; i += 3) {
+    if (getText(buttons[i]) != '') {
+      // for row conditions
+      if (
+        getText(buttons[i]) === getText(buttons[i + 1]) &&
+        getText(buttons[i + 1]) === getText(buttons[i + 2])
+      ) {
+        // emit winner event
+        console.log(`Winner is ${getText(buttons[i])} row wise`);
+        return true;
+      }
+    }
   }
+  return false;
+}
+
+function checkForColumn() {
+  // check for columns
+  for (let i = 0; i < 3; i++) {
+    if (getText(buttons[i]) !== '') {
+      if (
+        getText(buttons[i]) === getText(buttons[i + 3]) &&
+        getText(buttons[i + 3]) === getText(buttons[i + 6])
+      ) {
+        // emit winner event
+        console.log(`Winner is ${getText(buttons[i])} column wise`);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function checkForDiagonal() {
+  if (getText(buttons[4]) !== '') {
+    if (
+      getText(buttons[0]) === getText(buttons[4]) &&
+      getText(buttons[4]) === getText(buttons[8])
+    ) {
+      console.log(`${getText(buttons[0])} diagonal Wise`);
+      return true;
+    } else if (
+      getText(buttons[2]) === getText(buttons[4]) &&
+      getText(buttons[4]) === getText(buttons[6])
+    ) {
+      console.log(`${getText(buttons[2])} diagonal Wise`);
+      return true;
+    }
+  }
+  return false;
+}
+
+function checkWinner() {
+  if (checkForColumn() || checkForDiagonal() || checkForRows()) return true;
+  return false;
 }
 
 async function getName() {
@@ -51,7 +100,6 @@ socket.on('symbol', (symbol) => {
 socket.on('state', (stateVar) => {
   state = stateVar === 1 ? true : false;
   if (state === true) addEvents();
-  console.log('state');
 });
 
 socket.on('roomNumber', (roomNumber) => {
@@ -79,9 +127,7 @@ async function playerAction(event) {
   const button = event.target;
   button.innerText = mark;
   socket.emit('markTile', tileSelected);
-  console.log('State Before', state);
   flipState();
-  console.log('State after', state);
   removeEvents();
 }
 
