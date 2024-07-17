@@ -5,10 +5,15 @@ let opponentName, yourName;
 let winnerSymbol = '';
 let marked = 0;
 
-function staleState() {}
+function staleState() {
+  buttons.forEach((button) => {
+    button.disabled = false;
+    button.innerText = '';
+  });
+}
 
 resetButton.addEventListener('click', (event) => {
-  //do something here
+  staleState();
 });
 
 function getWinnerName(winnerSymbol) {
