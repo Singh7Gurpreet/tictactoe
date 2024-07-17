@@ -1,6 +1,23 @@
 const buttons = document.querySelectorAll('.elementButton');
+const resetButton = document.querySelector('.reset');
 let state = false;
 let opponentName, yourName;
+let winnerSymbol = '';
+let marked = 0;
+
+function staleState() {}
+
+resetButton.addEventListener('click', (event) => {
+  //do something here
+});
+
+function getWinnerName(winnerSymbol) {
+  console.log(winnerSymbol, yourName, opponentName);
+  let name = '';
+  if (winnerSymbol == mark) name = yourName;
+  else name = opponentName;
+  return name;
+}
 
 function getText(button) {
   return button.innerText;
@@ -16,7 +33,8 @@ function checkForRows() {
         getText(buttons[i + 1]) === getText(buttons[i + 2])
       ) {
         // emit winner event
-        console.log(`Winner is ${getText(buttons[i])} row wise`);
+        winnerSymbol = getText(buttons[i]);
+        console.log('rows');
         return true;
       }
     }
@@ -33,7 +51,8 @@ function checkForColumn() {
         getText(buttons[i + 3]) === getText(buttons[i + 6])
       ) {
         // emit winner event
-        console.log(`Winner is ${getText(buttons[i])} column wise`);
+        winnerSymbol = getText(buttons[i]);
+        console.log('column');
         return true;
       }
     }
@@ -53,7 +72,8 @@ function checkForDiagonal() {
       getText(buttons[2]) === getText(buttons[4]) &&
       getText(buttons[4]) === getText(buttons[6])
     ) {
-      console.log(`${getText(buttons[2])} diagonal Wise`);
+      winnerSymbol = getText(buttons[2]);
+      console.log('diagonal');
       return true;
     }
   }
@@ -61,9 +81,20 @@ function checkForDiagonal() {
 }
 
 function checkWinner() {
-  if (checkForColumn() || checkForDiagonal() || checkForRows()) return true;
+  if (checkForColumn() || checkForDiagonal() || checkForRows()) {
+    console.log(getWinnerName(winnerSymbol));
+    socket.emit('winner', getWinnerName(winnerSymbol));
+    return true;
+  }
+  if (marked === 9) {
+    socket.emit('tied');
+  }
   return false;
 }
+
+socket.on('tied', () => {
+  console.log('Game tied');
+});
 
 async function getName() {
   try {
@@ -76,7 +107,7 @@ async function getName() {
   }
 }
 
-let mark, ownMark;
+let mark, opponentMark;
 
 function flipText() {
   const turn =
@@ -89,11 +120,16 @@ function flipState() {
   flipText();
 }
 
+socket.on('winner', (winnerName) => {
+  document.querySelector('.turns p').innerText = `${winnerName} wins`;
+  document.querySelector('.reset').style.display = 'block';
+});
+
 // s is player's state fetching info from server
 socket.on('symbol', (symbol) => {
   mark = symbol;
-  if (mark === 'X') ownMark = 'O';
-  else ownMark = 'X';
+  if (mark === 'X') opponentMark = 'O';
+  else opponentMark = 'X';
   checkWinner();
 });
 
@@ -115,8 +151,9 @@ socket.on('joinedRoom', async () => {
 });
 
 socket.on('markedStatus', (markedTile) => {
-  buttons[markedTile - 1].innerText = ownMark;
+  buttons[markedTile - 1].innerText = opponentMark;
   buttons[markedTile - 1].disabled = true;
+  marked++;
   checkWinner();
   flipState();
   addEvents();
@@ -126,7 +163,9 @@ async function playerAction(event) {
   const tileSelected = event.target.dataset.value;
   const button = event.target;
   button.innerText = mark;
+  marked++;
   socket.emit('markTile', tileSelected);
+  checkWinner();
   flipState();
   removeEvents();
 }

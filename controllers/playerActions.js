@@ -5,11 +5,11 @@ function tileMarked(socket, markedTile) {
 }
 
 function winner(socket, player) {
-  console.log('this player is winner');
+  socket.emit('winner', player);
 }
 
 function tied(socket) {
-  console.log('This game is tied');
+  socket.emit('tied');
 }
 
 module.exports = { tileMarked, winner, tied };

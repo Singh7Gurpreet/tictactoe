@@ -4,6 +4,20 @@ html,body {
   height: 100%;
 }
 
+.reset {
+  height: 50px;
+  width: 50px;
+  background-color: black;
+  border: none;
+  cursor: pointer;
+  display: none;
+}
+
+.reset img {
+  height:30px;
+  width: 30px;
+}
+
 body{
   background-color: black;
 }

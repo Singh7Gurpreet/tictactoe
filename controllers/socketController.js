@@ -39,7 +39,7 @@ function socketFunction(socket) {
 
   //Notifies the tie condition
   socket.on(TIED, () => {
-    tied(socket.player);
+    tied(socket);
   });
 }
 
