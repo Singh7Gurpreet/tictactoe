@@ -5,6 +5,7 @@ const JOIN_ROOM = 'joinRoom';
 const MARK_TILE = 'markTile';
 const WINNER = 'winner';
 const TIED = 'tied';
+const RESET = 'reset';
 
 // Will contain logic for joining already created game
 // and creatting game
@@ -40,6 +41,11 @@ function socketFunction(socket) {
   //Notifies the tie condition
   socket.on(TIED, () => {
     tied(socket);
+  });
+
+  socket.on(RESET, () => {
+    socket.emit('reset');
+    socket.to(socket.request.session.room).emit('reset');
   });
 }
 

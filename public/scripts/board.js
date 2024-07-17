@@ -5,21 +5,30 @@ let opponentName, yourName;
 let winnerSymbol = '';
 let marked = 0;
 
-function staleState() {
+function resetState() {
   buttons.forEach((button) => {
     button.disabled = false;
     button.innerText = '';
   });
+  winnerSymbol = '';
+  marked = 0;
+  flipText();
+  if (state === true) addEvents();
 }
 
+socket.on('reset', () => {
+  resetState();
+  resetButton.style.display = 'none';
+});
+
 resetButton.addEventListener('click', (event) => {
-  staleState();
+  socket.emit('reset');
 });
 
 function getWinnerName(winnerSymbol) {
   console.log(winnerSymbol, yourName, opponentName);
   let name = '';
-  if (winnerSymbol == mark) name = yourName;
+  if (winnerSymbol === mark) name = yourName;
   else name = opponentName;
   return name;
 }
@@ -99,11 +108,15 @@ function checkWinner() {
 
 socket.on('tied', () => {
   console.log('Game tied');
+  resetButton.style.display = 'block';
+  document.querySelector('.turns p').innerText = 'Game Tied';
 });
 
 async function getName() {
   try {
-    const response = await axios.get('http://localhost:3000/name');
+    const response = await axios.get(
+      `http://${window.location.hostname}:3000/name`
+    );
     opponentName = response.data.opponentName;
     yourName = response.data.name;
   } catch (error) {
@@ -128,6 +141,7 @@ function flipState() {
 socket.on('winner', (winnerName) => {
   document.querySelector('.turns p').innerText = `${winnerName} wins`;
   document.querySelector('.reset').style.display = 'block';
+  removeEvents();
 });
 
 // s is player's state fetching info from server
