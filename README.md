@@ -1,1 +1,1 @@
-Use npm start to build it.
+Use `npm start` to build it.
